@@ -46,7 +46,7 @@ public class UserServiceTests {
         when(passwordEncoder.encode(anyString())).thenReturn("hashedPassword");
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
         
-        User created = userService.createUser(user);
+        UserCreateDTO created = userService.createUser(user);
         assertNotNull(created);
         assertEquals(user.getUsername(), created.getUsername());
         assertEquals("hashedPassword", created.getPassword());

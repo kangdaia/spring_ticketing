@@ -1,9 +1,7 @@
 package com.study_spring.ticketing.service;
 
-import com.study_spring.ticketing.domain.User;
 import com.study_spring.ticketing.dto.UserCreateDTO;
 import com.study_spring.ticketing.repository.UserRepository;
-
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,14 +21,14 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User createUser(UserCreateDTO userCreateDTO) {
+    public UserCreateDTO createUser(UserCreateDTO userCreateDTO) {
         validateDuplicateUsername(userCreateDTO);
         validateDuplicateEmail(userCreateDTO);
         String rawPassword = userCreateDTO.getPassword();
         String encodedPassword = passwordEncoder.encode(rawPassword);
         userCreateDTO.setPassword(encodedPassword);
-        User updatedUser = userRepository.save(userCreateDTO.toEntity());
-        return updatedUser;
+        userRepository.save(userCreateDTO.toEntity());
+        return userCreateDTO;
     }
 
     private void validateDuplicateUsername(UserCreateDTO userCreateDTO) {
