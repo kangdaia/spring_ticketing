@@ -21,7 +21,7 @@ public class UserCreateDTO {
     @NotBlank(message = "이메일이 입력되지 않았습니다.")
     @Email(message = "이메일 양식이 일치하지 않습니다.")
     private String email;
-    @Pattern(regexp = "^\\\\d{2,3}-\\\\d{3,4}-\\\\d{4}$", message = "핸드폰 번호 양식이 일치하지 않습니다.")
+    @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "핸드폰 번호 양식이 일치하지 않습니다.")
     @NotBlank(message = "전화번호가 입력되지 않았습니다.")
     private String phone;
 

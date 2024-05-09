@@ -4,12 +4,12 @@ import com.study_spring.ticketing.domain.User;
 import com.study_spring.ticketing.dto.UserCreateDTO;
 import com.study_spring.ticketing.repository.UserRepository;
 
-import jakarta.transaction.Transactional;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
@@ -23,14 +23,14 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public UserCreateDTO createUser(UserCreateDTO userCreateDTO) {
+    public User createUser(UserCreateDTO userCreateDTO) {
         validateDuplicateUsername(userCreateDTO);
         validateDuplicateEmail(userCreateDTO);
         String rawPassword = userCreateDTO.getPassword();
         String encodedPassword = passwordEncoder.encode(rawPassword);
         userCreateDTO.setPassword(encodedPassword);
-        userRepository.save(userCreateDTO.toEntity());
-        return userCreateDTO;
+        User updatedUser = userRepository.save(userCreateDTO.toEntity());
+        return updatedUser;
     }
 
     private void validateDuplicateUsername(UserCreateDTO userCreateDTO) {
