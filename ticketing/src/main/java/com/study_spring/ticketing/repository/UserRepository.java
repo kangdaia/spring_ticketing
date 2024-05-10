@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +18,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.username = :username")
     Optional<User> findByUsername(@Param("username") String username);
-    
-    
-    //User updateById(Long id, User user);
+
+    @Modifying
+    @Query("UPDATE User u SET u.email = :email WHERE u.username = :username")
+    Optional<User> updateEmailByUsername(
+        @Param("username") String username, 
+        @Param("email") String email
+    );
+
 }
