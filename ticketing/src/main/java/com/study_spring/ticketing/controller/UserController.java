@@ -2,12 +2,23 @@ package com.study_spring.ticketing.controller;
 
 import com.study_spring.ticketing.dto.UserCreateDTO;
 import com.study_spring.ticketing.service.UserService;
+import jakarta.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.study_spring.ticketing.domain.User;
+import com.study_spring.ticketing.dto.UserCreateDTO;
+import com.study_spring.ticketing.service.UserService;
+
 @RestController
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
 
@@ -15,9 +26,10 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/user")
-    public String user() {
-        return "user controller";
+    @PostMapping("/signup")
+    public ResponseEntity<String> create(@Valid @RequestBody UserCreateDTO userCreateDTO) {
+        UserCreateDTO response = userService.createUser(userCreateDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response.getUsername());
     }
 
     @GetMapping("/user/login")
