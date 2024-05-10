@@ -25,4 +25,6 @@ logging:
   level:
     root: DEBUG
 jwt:
+  header: Authorization
   secret: 444b5a80712142b2a0b0a2f9f1e09f9f4af7c116cdb04c685d25230b1e8a307e9320b7269b5b32f19b5a98e298399969d25c61e1feec16e0f4e332b33ff93bd6
+  token-validity-in-seconds: 86400
