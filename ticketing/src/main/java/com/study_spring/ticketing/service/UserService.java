@@ -24,11 +24,21 @@ public class UserService {
     public UserCreateDTO createUser(UserCreateDTO userCreateDTO) {
         validateDuplicateUsername(userCreateDTO);
         validateDuplicateEmail(userCreateDTO);
-        String rawPassword = userCreateDTO.getPassword();
-        String encodedPassword = passwordEncoder.encode(rawPassword);
-        userCreateDTO.setPassword(encodedPassword);
-        userRepository.save(userCreateDTO.toEntity());
-        return userCreateDTO;
+
+        Authority authority = Authority.builder()
+                .authorityName("ROLE_USER")
+                .build();
+
+        User user = User.builder()
+                .username(userCreateDTO.getUsername())
+                .password(passwordEncoder.encode(userCreateDTO.getPassword()))
+                .phone(userCreateDTO.getPhone())
+                .email(userCreateDTO.getEmail())
+                .authorities(Collections.singleton(authority))
+                .activated(true)
+                .build();
+
+        return UserCreateDTO.from(userRepository.save(user));
     }
 
     private void validateDuplicateUsername(UserCreateDTO userCreateDTO) {
