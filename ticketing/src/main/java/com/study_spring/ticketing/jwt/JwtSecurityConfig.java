@@ -13,6 +13,7 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
 
     @Override
     public void configure(HttpSecurity http) {
+        //UsernamePasswordAuthenticationFilter 뒤에 저장 생성자 주입 받은 JwtTokenProvider를 넣어준다.
         http.addFilterBefore(
                 new JwtFilter(tokenProvider),
                 UsernamePasswordAuthenticationFilter.class
