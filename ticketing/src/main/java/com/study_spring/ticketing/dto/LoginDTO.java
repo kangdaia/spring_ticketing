@@ -12,11 +12,11 @@ import jakarta.validation.constraints.Size;
 @NoArgsConstructor
 public class LoginDTO {
 
-    @NotNull
+    @NotNull(message = "username이 입력되지 않았습니다.")
     @Size(min = 3, max = 50)
     private String username;
 
-    @NotNull
+    @NotNull(message = "비밀번호가 입력되지 않았습니다.")
     @Size(min = 3, max = 100)
     private String password;
 }
