@@ -1,10 +1,5 @@
 package com.study_spring.ticketing.dto;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import com.study_spring.ticketing.domain.User;
 
 import jakarta.validation.constraints.Email;
@@ -55,12 +50,17 @@ public class UserCreateDTO {
                 .build();
     }
 
-    public static UserCreateDTO toUserDTO(User user) {
+    public static UserCreateDTO from(User user) {
+        if(user == null) return null;
+
         return UserCreateDTO.builder()
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .password(user.getPassword())
                 .username(user.getUsername())
+                .phone(user.getPhone())
+                .email(user.getEmail())
+                .authorityDTOSet(user.getAuthorities().stream()
+                        .map(authority -> AuthorityDTO.builder().authorityName(authority.getAuthorityName()).build())
+                        .collect(Collectors.toSet()))
                 .build();
     }
+
 }
