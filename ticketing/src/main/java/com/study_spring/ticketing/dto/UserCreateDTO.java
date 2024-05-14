@@ -11,9 +11,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.*;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class UserCreateDTO {
     @NotBlank(message = "username이 입력되지 않았습니다.")
     @Size(min = 3, max = 50, message = "username은 최소 3자리 이상의 길이로 작성해야합니다.")
@@ -29,6 +35,8 @@ public class UserCreateDTO {
     @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "핸드폰 번호 양식이 일치하지 않습니다.")
     @NotBlank(message = "전화번호가 입력되지 않았습니다.")
     private String phone;
+
+    private Set<AuthorityDTO> authorityDTOSet;
 
     @Builder
     public UserCreateDTO(String username, String password, String email, String phone) {
