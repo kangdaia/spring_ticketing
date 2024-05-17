@@ -27,40 +27,40 @@ public class UserCreateDTOTests {
 
     @Test
     public void testUserCreateDTO_ValidationSuccess() {
-        UserCreateDTO user = new UserCreateDTO("john_doe", "securePassword123", "john@example.com", "010-1111-0000");
-        Set<ConstraintViolation<UserCreateDTO>> violations = validator.validate(user);
+        UserDTO.CreateDTO user = new UserDTO.CreateDTO("john_doe", "securePassword123", "john@example.com", "010-1111-0000");
+        Set<ConstraintViolation<UserDTO.CreateDTO>> violations = validator.validate(user);
         assertTrue(violations.isEmpty(), "There should be no validation errors");
     }
     
     @Test
     void testUserCreateDTO_ValidationFailure_BlankUsername() {
-        UserCreateDTO user = new UserCreateDTO("", "securePassword123", "notanemail", "010-1111-0000");
-        Set<ConstraintViolation<UserCreateDTO>> violations = validator.validate(user);
+        UserDTO.CreateDTO user = new UserDTO.CreateDTO("", "securePassword123", "notanemail", "010-1111-0000");
+        Set<ConstraintViolation<UserDTO.CreateDTO>> violations = validator.validate(user);
         assertEquals(3, violations.size(), "There should be three validation errors");
 
-        for (ConstraintViolation<UserCreateDTO> violation : violations) {
+        for (ConstraintViolation<UserDTO.CreateDTO> violation : violations) {
             System.out.println(violation.getMessage());  // Output error messages for debugging
         }
     }
 
     @Test
     void testUserCreateDTO_ValidationFailure_WrongPatternPassword() {
-        UserCreateDTO user = new UserCreateDTO("username", "nonsecp", "some@email.com", "010-1111-0000");
-        Set<ConstraintViolation<UserCreateDTO>> violations = validator.validate(user);
+        UserDTO.CreateDTO user = new UserDTO.CreateDTO("username", "nonsecp", "some@email.com", "010-1111-0000");
+        Set<ConstraintViolation<UserDTO.CreateDTO>> violations = validator.validate(user);
         assertEquals(2, violations.size(), "There should be one validation errors");
 
-        for (ConstraintViolation<UserCreateDTO> violation : violations) {
+        for (ConstraintViolation<UserDTO.CreateDTO> violation : violations) {
             System.out.println(violation.getMessage());  // Output error messages for debugging
         }
     }
 
     @Test
     void testUserCreateDTO_ValidationFailure_WrongPatternPhone() {
-        UserCreateDTO user = new UserCreateDTO("username", "securePassword123", "some@email.com", "010-00-0000");
-        Set<ConstraintViolation<UserCreateDTO>> violations = validator.validate(user);
+        UserDTO.CreateDTO user = new UserDTO.CreateDTO("username", "securePassword123", "some@email.com", "010-00-0000");
+        Set<ConstraintViolation<UserDTO.CreateDTO>> violations = validator.validate(user);
         assertEquals(1, violations.size(), "There should be one validation errors");
 
-        for (ConstraintViolation<UserCreateDTO> violation : violations) {
+        for (ConstraintViolation<UserDTO.CreateDTO> violation : violations) {
             System.out.println(violation.getMessage());  // Output error messages for debugging
         }
     }

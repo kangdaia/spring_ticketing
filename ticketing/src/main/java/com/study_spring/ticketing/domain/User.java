@@ -38,6 +38,13 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private Date create_at;
 
+    public User(String username, String password, String email, String phone) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+    }
+
     @ManyToMany
     @JoinTable(
             name = "user_authority",

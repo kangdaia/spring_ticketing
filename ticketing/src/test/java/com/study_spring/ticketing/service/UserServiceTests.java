@@ -20,7 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.*;
 
 import com.study_spring.ticketing.domain.User;
-import com.study_spring.ticketing.dto.UserCreateDTO;
+import com.study_spring.ticketing.dto.UserDTO;
 import com.study_spring.ticketing.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,12 +41,12 @@ public class UserServiceTests {
 
     @Test
     public void testCreateUser() {
-        UserCreateDTO user = new UserCreateDTO("user", "psw", "email@com.com", "010-2345-0000");
+        UserDTO.CreateDTO user = new UserDTO.CreateDTO("user", "psw", "email@com.com", "010-2345-0000");
         User userEntity = user.toEntity();
         when(passwordEncoder.encode(anyString())).thenReturn("hashedPassword");
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
         
-        UserCreateDTO created = userService.createUser(user);
+        UserDTO.CreateDTO created = userService.createUser(user);
         assertNotNull(created);
         assertEquals(user.getUsername(), created.getUsername());
         assertEquals("hashedPassword", created.getPassword());
@@ -56,7 +56,7 @@ public class UserServiceTests {
     @Test
     public void testValidateDuplicateUsername() {
         String username = "existinguser";
-        UserCreateDTO existingUser = new UserCreateDTO(username, "psw", "email@com.com", "010-2345-0000");;
+        UserDTO.CreateDTO existingUser = new UserDTO.CreateDTO(username, "psw", "email@com.com", "010-2345-0000");;
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(existingUser.toEntity()));
 
         assertThrows(IllegalStateException.class, () -> userService.createUser(existingUser),
@@ -66,7 +66,7 @@ public class UserServiceTests {
     @Test
     public void testValidateDuplicateEmail() {
         String email = "somesame@test.com";
-        UserCreateDTO existingUser = new UserCreateDTO("user1", "psw", email, "010-2345-0000");;
+        UserDTO.CreateDTO existingUser = new UserDTO.CreateDTO("user1", "psw", email, "010-2345-0000");;
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(existingUser.toEntity()));
 
         assertThrows(IllegalStateException.class, () -> userService.createUser(existingUser),
