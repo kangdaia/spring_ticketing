@@ -1,6 +1,6 @@
 package com.study_spring.ticketing.controller;
 
-import com.study_spring.ticketing.dto.UserCreateDTO;
+import com.study_spring.ticketing.dto.UserDTO;
 import com.study_spring.ticketing.service.UserService;
 import jakarta.validation.Valid;
 
@@ -21,8 +21,8 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> create(@Valid @RequestBody UserCreateDTO userCreateDTO) {
-        UserCreateDTO response = userService.createUser(userCreateDTO);
+    public ResponseEntity<String> create(@Valid @RequestBody UserDTO.CreateDTO userCreateDTO) {
+        UserDTO.CreateDTO response = userService.createUser(userCreateDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(response.getUsername());
     }
 

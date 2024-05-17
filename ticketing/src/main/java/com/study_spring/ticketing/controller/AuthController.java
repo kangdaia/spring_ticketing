@@ -1,8 +1,7 @@
 package com.study_spring.ticketing.controller;
 
-
-import com.study_spring.ticketing.dto.LoginDTO;
 import com.study_spring.ticketing.dto.TokenDTO;
+import com.study_spring.ticketing.dto.UserDTO;
 import com.study_spring.ticketing.jwt.JwtFilter;
 import com.study_spring.ticketing.jwt.TokenProvider;
 import jakarta.validation.Valid;
@@ -30,7 +29,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDTO> authorize(@Valid @RequestBody LoginDTO loginDto) {
+    public ResponseEntity<TokenDTO> authorize(@Valid @RequestBody UserDTO.LoginDTO loginDto) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
