@@ -1,4 +1,10 @@
 spring:
+  resources:
+    static-locations: classpath:/templates/,classpath:/static/
+  mvc:
+    view:
+      prefix: /templates/
+      suffix: .html
   config:
     import:
       - classpath:application-db.yml
@@ -10,10 +16,16 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        format_sql: true
+        show_sql: true
+        '[format_sql]': true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        '[default_schema]': public
 server:
   port: 8088
 logging:
   level:
     root: DEBUG
+jwt:
+  header: Authorization
+  secret: 444b5a80712142b2a0b0a2f9f1e09f9f4af7c116cdb04c685d25230b1e8a307e9320b7269b5b32f19b5a98e298399969d25c61e1feec16e0f4e332b33ff93bd6
+  token-validity-in-seconds: 86400
