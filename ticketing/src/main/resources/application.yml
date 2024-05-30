@@ -1,6 +1,4 @@
 spring:
-  resources:
-    static-locations: classpath:/templates/,classpath:/static/
   mvc:
     view:
       prefix: /templates/
@@ -16,10 +14,13 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        show_sql: true
+        '[show_sql]': true
         '[format_sql]': true
         dialect: org.hibernate.dialect.PostgreSQLDialect
         '[default_schema]': public
+  web:
+    resources:
+      static-locations: classpath:/templates/,classpath:/static/
 server:
   port: 8088
 logging:
