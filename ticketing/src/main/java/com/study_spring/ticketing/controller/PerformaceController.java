@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-@RequestMapping("/event")
-public class EventController {
+@RequestMapping("/performace")
+public class PerformaceController {
     @GetMapping("/fetch-data")
     public String fetchData(@RequestParam String param) {
         // url 호출

@@ -8,27 +8,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="Location")
+@Table(name="Venue")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // Lombok을 사용하여 기본 생성자 추가
 @AllArgsConstructor // 모든 필드를 포함하는 생성자 추가
-public class Location {
+public class Venue {
     @Id
     @Column(nullable = false, length = 20)
-    private String location_id;
+    private String venue_id;
     @Column(nullable = false, length = 100)
-    private String loc_name;
+    private String venue_name;
     @Column(nullable = false, length = 4)
-    private String areacode;
+    private Integer seat_scale;
     @Column(nullable = false, length = 4)
-    private String sigungucodesub;
-    @Column(nullable = false)
-    private Integer venue_cnt;
-    @Column(nullable = false, length = 100)
-    private String address;
-    @Column(nullable = false)
-    private Double latitude;
-    @Column(nullable = false)
-    private Double longitude;
+    private Integer disabled_scale;
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
 }
