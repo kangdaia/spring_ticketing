@@ -27,30 +27,30 @@ public class LoginDTOTest {
 
     @Test
     void testLoginDTO_ValidationSuccess() {
-        LoginDTO loginDTO = new LoginDTO("testuser","Testuser123");
-        Set<ConstraintViolation<LoginDTO>> violations = validator.validate(loginDTO);
+        UserDTO.LoginDTO loginDTO = new UserDTO.LoginDTO("testuser","Testuser123");
+        Set<ConstraintViolation<UserDTO.LoginDTO>> violations = validator.validate(loginDTO);
         assertTrue(violations.isEmpty(), "There should be no validation errors");
     }
 
 
     @Test
     void  testLoginDTO_ValidationFailure_BlankUsername() {
-        LoginDTO loginDTO = new LoginDTO("","Testuser123");
-        Set<ConstraintViolation<LoginDTO>> violations = validator.validate(loginDTO);
+        UserDTO.LoginDTO loginDTO = new UserDTO.LoginDTO("","Testuser123");
+        Set<ConstraintViolation<UserDTO.LoginDTO>> violations = validator.validate(loginDTO);
         assertEquals(1, violations.size(), "There should be three validation errors");
 
-        for (ConstraintViolation<LoginDTO> violation : violations) {
+        for (ConstraintViolation<UserDTO.LoginDTO> violation : violations) {
             System.out.println(violation.getMessage());  // Output error messages for debugging
         }
     }
 
     @Test
     void  testLoginDTO_ValidationFailure_BlankPassword() {
-        LoginDTO loginDTO = new LoginDTO("testuser","");
-        Set<ConstraintViolation<LoginDTO>> violations = validator.validate(loginDTO);
+        UserDTO.LoginDTO loginDTO = new UserDTO.LoginDTO("testuser","");
+        Set<ConstraintViolation<UserDTO.LoginDTO>> violations = validator.validate(loginDTO);
         assertEquals(1, violations.size(), "There should be three validation errors");
 
-        for (ConstraintViolation<LoginDTO> violation : violations) {
+        for (ConstraintViolation<UserDTO.LoginDTO> violation : violations) {
             System.out.println(violation.getMessage());  // Output error messages for debugging
         }
     }

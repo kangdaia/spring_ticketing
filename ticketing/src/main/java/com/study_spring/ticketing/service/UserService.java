@@ -2,7 +2,7 @@ package com.study_spring.ticketing.service;
 
 import com.study_spring.ticketing.domain.Authority;
 import com.study_spring.ticketing.domain.User;
-import com.study_spring.ticketing.dto.UserCreateDTO;
+import com.study_spring.ticketing.dto.UserDTO;
 import com.study_spring.ticketing.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserCreateDTO createUser(UserCreateDTO userCreateDTO) {
+    public UserDTO.CreateDTO createUser(UserDTO.CreateDTO userCreateDTO) {
         validateDuplicateUsername(userCreateDTO);
         validateDuplicateEmail(userCreateDTO);
 
@@ -38,17 +38,17 @@ public class UserService {
                 .activated(true)
                 .build();
 
-        return UserCreateDTO.from(userRepository.save(user));
+        return UserDTO.CreateDTO.from(userRepository.save(user));
     }
 
-    private void validateDuplicateUsername(UserCreateDTO userCreateDTO) {
+    private void validateDuplicateUsername(UserDTO.CreateDTO userCreateDTO) {
         userRepository.findByUsername(userCreateDTO.getUsername())
                 .ifPresent(m -> {
                     throw new IllegalStateException("이미 존재하는 회원입니다.");
                 });
     }
 
-    private void validateDuplicateEmail(UserCreateDTO userCreateDTO) {
+    private void validateDuplicateEmail(UserDTO.CreateDTO userCreateDTO) {
         userRepository.findByEmail(userCreateDTO.getEmail())
                 .ifPresent(m -> {
                     throw new IllegalStateException("이미 가입된 이메일입니다.");
