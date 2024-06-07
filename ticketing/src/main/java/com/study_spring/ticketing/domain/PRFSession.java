@@ -28,6 +28,6 @@ public class PRFSession {
     private Integer prf_session_end;
 
     @ManyToOne
-    @JoinColumn(name = "prf_id")
+    @JoinColumn(name = "prf_id", nullable = false)
     private Performance prf;
 }

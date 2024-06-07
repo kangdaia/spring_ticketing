@@ -27,6 +27,6 @@ public class PRFPrice {
     private Double ticket_price;
 
     @ManyToOne
-    @JoinColumn(name = "prf_id")
+    @JoinColumn(name = "prf_id", nullable = false)
     private Performance prf;
 }
