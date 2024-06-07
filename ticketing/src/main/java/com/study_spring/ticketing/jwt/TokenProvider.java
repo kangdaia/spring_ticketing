@@ -1,5 +1,6 @@
 package com.study_spring.ticketing.jwt;
 
+import com.study_spring.ticketing.dto.TokenDTO;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -27,15 +28,21 @@ public class TokenProvider implements InitializingBean {
 
     private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
     private static final String AUTHORITIES_KEY = "auth";
+    private static final String BEARER_TYPE = "Bearer";
     private final String secret;
-    private final long tokenValidityInMilliseconds;
+    private final long accessTokenValidityInMilliseconds;
+    private final long refreshTokenValidityInMilliseconds ;
     private Key key;
 
     public TokenProvider(
         @Value("${jwt.secret}") String secret,
-        @Value("${jwt.token-validity-in-seconds}") long tokenValidityInMilliseconds) {
+        @Value("${jwt.token-validity-in-seconds}") long accessTokenValidityInMilliseconds,
+        @Value("${jwt.token-validity-in-seconds}") long refreshTokenValidityInMilliseconds
+        ) {
         this.secret = secret;
-        this.tokenValidityInMilliseconds = tokenValidityInMilliseconds * 1000;
+        this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds;
+        this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
+
     }
 
     @Override
@@ -44,27 +51,49 @@ public class TokenProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(Authentication authentication) {
+    public TokenDTO createToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-        long now = (new Date()).getTime();
-        Date validity = new Date(now + this.tokenValidityInMilliseconds);
 
-        return Jwts.builder()
+        long now = (new Date()).getTime();
+        Date accessTokenValidity = new Date(now + this.accessTokenValidityInMilliseconds);
+        Date refreshTokenValidity = new Date(now + this.refreshTokenValidityInMilliseconds);
+
+        // Access Token 생성
+        String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(validity)
+                .setIssuedAt(new Date())
+                .setExpiration(accessTokenValidity)
                 .compact();
+
+        // Refresh Token 생성
+        String refreshToken = Jwts.builder()
+                .setSubject(authentication.getName())
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setIssuedAt(new Date())
+                .setExpiration(refreshTokenValidity)
+                .compact();
+
+
+
+
+        return TokenDTO.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .accessTokenExpiresIn(accessTokenValidity.getTime())
+                .build();
     }
 
-    public Authentication getAuthentication(String token) {
+    public Authentication getAuthentication(String accessToken) {
         Claims claims = Jwts
                 .parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(token)
+                .parseClaimsJws(accessToken)
                 .getBody();
 
         // Claim에서 권한 정보 가져오기
@@ -76,7 +105,7 @@ public class TokenProvider implements InitializingBean {
         // User 객체를 만들어서 Authentication 리턴
         User principal = new User(claims.getSubject(), "", authorities);
 
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        return new UsernamePasswordAuthenticationToken(principal, accessToken, authorities);
     }
 
 
@@ -95,4 +124,15 @@ public class TokenProvider implements InitializingBean {
         }
         return false;
     }
+
+    public String extractSubject(String accessToken) {
+        Claims claims = Jwts
+                .parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody();
+        return claims.getSubject();
+    }
+
 }
