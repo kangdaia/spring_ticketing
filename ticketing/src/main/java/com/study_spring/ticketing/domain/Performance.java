@@ -15,7 +15,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name="Performace")
+@Table(name="Performance")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // Lombok을 사용하여 기본 생성자 추가
@@ -65,9 +65,9 @@ public class Performance {
     @JoinColumn(name = "venue_id", nullable = false)
     private Venue venue;
 
-    @OneToMany(mappedBy = "performance", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "prf", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PRFSession> prfSession;
 
-    @OneToMany(mappedBy = "performance", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "prf", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PRFPrice> prfPrice;
 }
